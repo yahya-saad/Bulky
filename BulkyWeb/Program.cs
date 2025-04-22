@@ -2,6 +2,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+#region Register Services
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+#endregion
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
