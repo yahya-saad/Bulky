@@ -1,4 +1,7 @@
-﻿namespace BulkyWeb.Data;
+﻿using Bulky.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Bulky.DataAccess.Data;
 
 public static class DataSeeder
 {
