@@ -1,28 +1,37 @@
 ﻿@model Category;
-<form method="POST">
-    <input type="hidden" asp-for="Id" />
-    <div class="border border-1 p-3 mt-4">
-        <div class="row pb-2">
-            <h2 class="text-primary">Delete Category</h2>
-            <hr class="border-1" />
-            <div class="mb-3">
-                <label asp-for="Name"></label>
-                <input asp-for="Name" class="form-control" disabled />
-            </div>
 
-            <div class="mb-3">
-                <label asp-for="DisplayOrder"></label>
-                <input asp-for="DisplayOrder" class="form-control" disabled/>
-            </div>
-        </div>
 
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
         <div class="row">
-            <div class="col-12 col-md-6  col-lg-3 mb-3 mb-md-0  ">
-                <button type="submit" class="btn btn-danger form-control">Delete</button>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-3 mb-md-0  ">
-                <a asp-action="Index" class="btn btn-outline-secondary form-control">Back to list</a>
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Delete Category</h2>
             </div>
         </div>
     </div>
-</form>
+    <div class="card-body p-4">
+        <input type="hidden" asp-for="Id" />
+        <form method="POST" class="row">
+            <div class="pt-3">
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="Name" class="form-control border-0 shadow" disabled />
+                    <label asp-for="Name" class="ms-2"></label>
+                </div>
+
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="DisplayOrder" class="form-control border-0 shadow" disabled />
+                    <label asp-for="DisplayOrder" class="ms-2"></label>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-md-6  col-lg-3 mb-3 mb-md-0  ">
+                    <button type="submit" class="btn btn-danger form-control">Delete</button>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 mb-3 mb-md-0  ">
+                    <a asp-action="Index" class="btn btn-secondary border form-control">Back to list</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

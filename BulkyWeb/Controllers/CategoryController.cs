@@ -25,6 +25,8 @@ public class CategoryController(ApplicationDbContext db) : Controller
         db.Add(obj);
         db.SaveChanges();
 
+        TempData["success"] = "Category created successfully";
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -51,6 +53,8 @@ public class CategoryController(ApplicationDbContext db) : Controller
         db.Update(obj);
         db.SaveChanges();
 
+        TempData["success"] = "Category updated successfully";
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -70,6 +74,9 @@ public class CategoryController(ApplicationDbContext db) : Controller
 
         db.Remove(category);
         db.SaveChanges();
+
+        TempData["success"] = "Category deleted successfully";
+
         return RedirectToAction(nameof(Index));
     }
 
