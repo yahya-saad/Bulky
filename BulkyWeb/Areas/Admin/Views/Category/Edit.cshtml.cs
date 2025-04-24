@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BulkyWeb.Views.Category
+namespace BulkyBookWeb.Views.Category
 {
-    public class CreateModel : PageModel
+    public class EditModel : PageModel
     {
         public void OnGet()
         {

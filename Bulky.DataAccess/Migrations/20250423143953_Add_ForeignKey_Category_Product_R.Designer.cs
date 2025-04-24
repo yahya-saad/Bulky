@@ -3,6 +3,7 @@ using BulkyBook.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BulkyBook.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423143953_Add_ForeignKey_Category_Product_R")]
+    partial class Add_ForeignKey_Category_Product_R
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,10 +88,6 @@ namespace BulkyBook.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("ListPrice")
                         .HasColumnType("float");
 
@@ -119,7 +118,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 1,
                             Description = "A gripping tale of time travel and the quest for eternal life. Join the protagonist on an epic journey across different eras, where every decision counts.",
                             ISBN = "SWD9999001",
-                            ImageUrl = "",
                             ListPrice = 99.0,
                             Price = 90.0,
                             Price100 = 80.0,
@@ -133,7 +131,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 2,
                             Description = "A chilling story of survival in a world on the brink of collapse. Will humanity overcome its darkest hour or succumb to the forces of nature?",
                             ISBN = "CAW777777701",
-                            ImageUrl = "",
                             ListPrice = 40.0,
                             Price = 30.0,
                             Price100 = 20.0,
@@ -147,7 +144,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 3,
                             Description = "In a secluded town, mysteries unfold as a sudden disappearance leads to secrets being uncovered. Can the truth be found before it's too late?",
                             ISBN = "RITO5555501",
-                            ImageUrl = "",
                             ListPrice = 55.0,
                             Price = 50.0,
                             Price100 = 35.0,
@@ -161,7 +157,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 1,
                             Description = "A whimsical and heartwarming story of friendship and dreams, where the sweetness of life is experienced through the simple joys of childhood.",
                             ISBN = "WS3333333301",
-                            ImageUrl = "",
                             ListPrice = 70.0,
                             Price = 65.0,
                             Price100 = 55.0,
@@ -175,7 +170,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 2,
                             Description = "An adventure-filled narrative that explores the mysteries of the deep sea. Dive into a world of unknown creatures and hidden treasures beneath the waves.",
                             ISBN = "SOTJ1111111101",
-                            ImageUrl = "",
                             ListPrice = 30.0,
                             Price = 27.0,
                             Price100 = 20.0,
@@ -189,7 +183,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 3,
                             Description = "A poetic reflection on nature's beauty and the changing seasons. This book brings to life the wonders of the natural world through vivid imagery and thoughtful prose.",
                             ISBN = "FOT000000001",
-                            ImageUrl = "",
                             ListPrice = 25.0,
                             Price = 23.0,
                             Price100 = 20.0,
@@ -203,7 +196,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 1,
                             Description = "A historical fiction novel set in the Victorian era, where forbidden love and betrayal intertwine, creating a powerful narrative of passion and regret.",
                             ISBN = "WIT00000101",
-                            ImageUrl = "",
                             ListPrice = 45.0,
                             Price = 40.0,
                             Price100 = 30.0,
@@ -217,7 +209,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 2,
                             Description = "A thrilling mystery novel where a detective uncovers long-buried secrets. Every twist and turn brings the protagonist closer to solving the enigma of a century-old crime.",
                             ISBN = "EOP998877601",
-                            ImageUrl = "",
                             ListPrice = 50.0,
                             Price = 45.0,
                             Price100 = 35.0,
@@ -231,7 +222,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 2,
                             Description = "A science fiction epic that takes readers to the farthest reaches of space. Encounter alien civilizations and technological marvels in this fast-paced space adventure.",
                             ISBN = "SBH123456789",
-                            ImageUrl = "",
                             ListPrice = 60.0,
                             Price = 55.0,
                             Price100 = 45.0,
@@ -245,7 +235,6 @@ namespace BulkyBook.DataAccess.Migrations
                             CategoryId = 3,
                             Description = "Set in a small, snow-covered village, this quiet, introspective novel delves into themes of loneliness, community, and the search for inner peace during the coldest of winters.",
                             ISBN = "SSN001122334",
-                            ImageUrl = "",
                             ListPrice = 38.0,
                             Price = 32.0,
                             Price100 = 25.0,

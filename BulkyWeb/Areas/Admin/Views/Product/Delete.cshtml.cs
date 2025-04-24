@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BulkyBookWeb.Views.Shared
+namespace BulkyBookWeb.Areas.Admin.Views.Product
 {
-    public class _NotificationModel : PageModel
+    public class DeleteModel : PageModel
     {
         public void OnGet()
         {

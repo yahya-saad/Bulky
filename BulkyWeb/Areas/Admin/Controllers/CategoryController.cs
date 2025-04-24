@@ -1,10 +1,19 @@
-﻿namespace BulkyWeb.Controllers;
+﻿namespace BulkyBookWeb.Areas.Admin.Controllers;
 
-public class CategoryController(ApplicationDbContext db) : Controller
+[Area("Admin")]
+public class CategoryController : Controller
 {
+    private readonly IUnitOfWork uow;
+
+    public CategoryController(IUnitOfWork unitOfWork)
+    {
+        uow = unitOfWork;
+    }
+
+
     public IActionResult Index()
     {
-        var categories = db.Categories.ToList();
+        var categories = uow.Category.GetAll();
         return View(categories);
     }
 
@@ -22,8 +31,8 @@ public class CategoryController(ApplicationDbContext db) : Controller
             return View();
         }
 
-        db.Add(obj);
-        db.SaveChanges();
+        uow.Category.Add(obj);
+        uow.Save();
 
         TempData["success"] = "Category created successfully";
 
@@ -33,7 +42,7 @@ public class CategoryController(ApplicationDbContext db) : Controller
     public IActionResult Edit(int id)
     {
 
-        var category = db.Categories.Find(id);
+        var category = uow.Category.Get(c => c.Id == id);
 
         if (category is null)
             return NotFound();
@@ -50,8 +59,8 @@ public class CategoryController(ApplicationDbContext db) : Controller
             return View();
         }
 
-        db.Update(obj);
-        db.SaveChanges();
+        uow.Category.Update(obj);
+        uow.Save();
 
         TempData["success"] = "Category updated successfully";
 
@@ -61,7 +70,7 @@ public class CategoryController(ApplicationDbContext db) : Controller
 
     public IActionResult Delete(int id)
     {
-        var category = db.Categories.Find(id);
+        var category = uow.Category.Get(c => c.Id == id);
         if (category == null) return NotFound();
         return View(category);
     }
@@ -69,11 +78,11 @@ public class CategoryController(ApplicationDbContext db) : Controller
     [HttpPost, ActionName("Delete")]
     public IActionResult DeletePost(int id)
     {
-        var category = db.Categories.Find(id);
+        var category = uow.Category.Get(c => c.Id == id);
         if (category == null) return NotFound();
 
-        db.Remove(category);
-        db.SaveChanges();
+        uow.Category.Remove(category);
+        uow.Save();
 
         TempData["success"] = "Category deleted successfully";
 

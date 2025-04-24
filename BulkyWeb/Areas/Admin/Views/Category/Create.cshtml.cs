@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BulkyBookWeb.Views.Shared
+namespace BulkyBookWeb.Views.Category
 {
-    public class _NotificationModel : PageModel
+    public class CreateModel : PageModel
     {
         public void OnGet()
         {

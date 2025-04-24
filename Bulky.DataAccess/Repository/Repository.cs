@@ -1,8 +1,8 @@
-﻿using Bulky.DataAccess.Data;
+﻿using BulkyBook.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Bulky.DataAccess.Repository;
+namespace BulkyBook.DataAccess.Repository;
 public class Repository<T> : IRepository<T> where T : class
 {
     private readonly ApplicationDbContext dbContext;

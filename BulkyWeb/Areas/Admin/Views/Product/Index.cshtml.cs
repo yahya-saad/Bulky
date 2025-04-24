@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BulkyWeb.Views.Category
+namespace BulkyBookWeb.Areas.Admin.Views.Product
 {
-    public class DeleteModel : PageModel
+    public class IndexModel : PageModel
     {
         public void OnGet()
         {
