@@ -21,7 +21,7 @@
         </div>
 
 
-        <table class="table table-bordered table-striped">
+        <table id="product-table-data" class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -32,7 +32,7 @@
                     <th></th>
                 </tr>
             </thead>
-
+@* 
             <tbody>
                 @foreach (var product in Model)
                 {
@@ -55,12 +55,12 @@
                     </tr>
                 }
             </tbody>
-
+ *@
         </table>
     </div>
 </div>
 
 
-
-
-
+@section Scripts {
+    <script src="~/js/product.js" asp-append-version="true"></script>
+}

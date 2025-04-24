@@ -69,12 +69,11 @@ public class ProductController : Controller
             return View(obj);
         }
 
-        string wwwRootPath = webHostEnvironment.WebRootPath;
 
         if (obj.Image != null)
         {
             string fileName = Guid.NewGuid().ToString() + Path.GetExtension(obj.Image.FileName);
-            string productPath = Path.Combine(wwwRootPath, "images", "products");
+            string productPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "products");
 
             // Delete old image if it's an update
             if (!string.IsNullOrEmpty(obj.Product.ImageUrl) && obj.Product.Id != 0)
@@ -107,26 +106,34 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public IActionResult Delete(int id)
+    #region APIs
+    [HttpGet]
+    public IActionResult GetAll()
     {
-        var product = uow.Product.Get(c => c.Id == id, includeProperties: "Category");
-        if (product == null) return NotFound();
-        return View(product);
+        var productList = uow.Product.GetAll(includeProperties: "Category");
+        return Json(new { data = productList });
     }
 
-    [HttpPost, ActionName("Delete")]
-    public IActionResult DeletePost(int id)
+    public IActionResult Delete(int id)
     {
         var product = uow.Product.Get(c => c.Id == id);
         if (product == null) return NotFound();
 
+        if (!string.IsNullOrEmpty(product.ImageUrl))
+        {
+            string productPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "products");
+            string oldImagePath = Path.Combine(productPath, product.ImageUrl);
+            if (System.IO.File.Exists(oldImagePath))
+                System.IO.File.Delete(oldImagePath);
+
+        }
+
         uow.Product.Remove(product);
         uow.Save();
 
-        TempData["success"] = "Product deleted successfully";
-
-        return RedirectToAction(nameof(Index));
+        return NoContent();
     }
 
+    #endregion
 
 }
