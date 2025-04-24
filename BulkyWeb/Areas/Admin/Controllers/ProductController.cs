@@ -7,41 +7,54 @@ namespace BulkyBookWeb.Areas.Admin.Controllers;
 public class ProductController : Controller
 {
     private readonly IUnitOfWork uow;
+    private readonly IWebHostEnvironment webHostEnvironment;
 
-    public ProductController(IUnitOfWork unitOfWork)
+    public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
     {
         uow = unitOfWork;
+        this.webHostEnvironment = webHostEnvironment;
     }
 
 
     public IActionResult Index()
     {
-        var products = uow.Product.GetAll();
+        var products = uow.Product.GetAll(includeProperties: "Category");
         return View(products);
     }
 
-    public IActionResult Create()
+    public IActionResult Upsert(int? id)
     {
-        var categoryList = uow.Category
-            .GetAll()
+        var productVM = new ProductVM
+        {
+            Product = new(),
+            CategoryList = uow.Category.GetAll()
             .Select(c => new SelectListItem
             {
                 Text = c.Name,
                 Value = c.Id.ToString()
-            }).ToList();
-
-        var productVM = new ProductVM
-        {
-            Product = new(),
-            CategoryList = categoryList,
+            }).ToList(),
         };
 
-        return View(productVM);
+        if (id == null || id == 0)
+        {
+            // Create Product
+            return View(productVM);
+        }
+        else
+        {
+            // Update Product
+            productVM.Product = uow.Product.Get(c => c.Id == id)!;
+
+            if (productVM.Product == null)
+                return NotFound();
+
+            return View(productVM);
+        }
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(ProductVM obj)
+    public IActionResult Upsert(ProductVM obj)
     {
         if (!ModelState.IsValid)
         {
@@ -56,46 +69,47 @@ public class ProductController : Controller
             return View(obj);
         }
 
-        uow.Product.Add(obj.Product);
-        uow.Save();
+        string wwwRootPath = webHostEnvironment.WebRootPath;
 
-        TempData["success"] = "Product created successfully";
-
-        return RedirectToAction(nameof(Index));
-    }
-
-    public IActionResult Edit(int id)
-    {
-
-        var product = uow.Product.Get(c => c.Id == id);
-
-        if (product is null)
-            return NotFound();
-
-        return View(product);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Edit(Product obj)
-    {
-        if (!ModelState.IsValid)
+        if (obj.Image != null)
         {
-            return View();
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(obj.Image.FileName);
+            string productPath = Path.Combine(wwwRootPath, "images", "products");
+
+            // Delete old image if it's an update
+            if (!string.IsNullOrEmpty(obj.Product.ImageUrl) && obj.Product.Id != 0)
+            {
+                string oldImagePath = Path.Combine(productPath, obj.Product.ImageUrl);
+                if (System.IO.File.Exists(oldImagePath))
+                    System.IO.File.Delete(oldImagePath);
+
+            }
+
+            string savePath = Path.Combine(productPath, fileName);
+            using var fileStream = new FileStream(savePath, FileMode.Create);
+            obj.Image.CopyTo(fileStream);
+
+            obj.Product.ImageUrl = fileName;
         }
 
-        uow.Product.Update(obj);
+        if (obj.Product.Id == 0)
+        {
+            uow.Product.Add(obj.Product);
+            TempData["success"] = "Product created successfully";
+        }
+        else
+        {
+            uow.Product.Update(obj.Product);
+            TempData["success"] = "Product updated successfully";
+        }
+
         uow.Save();
-
-        TempData["success"] = "Product updated successfully";
-
         return RedirectToAction(nameof(Index));
     }
-
 
     public IActionResult Delete(int id)
     {
-        var product = uow.Product.Get(c => c.Id == id);
+        var product = uow.Product.Get(c => c.Id == id, includeProperties: "Category");
         if (product == null) return NotFound();
         return View(product);
     }
