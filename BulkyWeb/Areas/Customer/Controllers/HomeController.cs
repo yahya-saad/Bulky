@@ -5,16 +5,23 @@ namespace BulkyBookWeb.Areas.Customer.Controllers;
 [Area("Customer")]
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IUnitOfWork uow;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(IUnitOfWork uow)
     {
-        _logger = logger;
+        this.uow = uow;
     }
 
     public IActionResult Index()
     {
-        return View();
+        var products = uow.Product.GetAll(includeProperties: "Category");
+        return View(products);
+    }
+
+    public IActionResult Details(int productId)
+    {
+        var product = uow.Product.Get(p => p.Id == productId, includeProperties: "Category");
+        return View(product);
     }
 
     public IActionResult Privacy()

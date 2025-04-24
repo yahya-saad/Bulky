@@ -10,6 +10,7 @@ function loadDataTable() {
         ajax: {
             url: '/Admin/Product/GetAll'
         },
+        scrollY: 500,
         columns: [
             { data: "title", width: "25%" },
             { data: "isbn", width: "15%" },

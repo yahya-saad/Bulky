@@ -1,3 +1,11 @@
+.img-hover-zoom {
+    transition: transform 0.3s ease-in-out;
+}
+
+    .img-hover-zoom:hover {
+        transform: scale(1.1);
+    }
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
