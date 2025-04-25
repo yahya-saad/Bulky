@@ -21,7 +21,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -31,7 +31,7 @@
                           <li class="nav-item">
                             <a class="nav-link " asp-area="Admin" asp-controller="Category" asp-action="Index">Categories</a>
                         </li>
-
+                        @if(User.IsInRole(AppConstants.Roles.Role_Admin)){
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Content Management
@@ -48,7 +48,10 @@
                                 </li>                           
                             </ul>
                         </li>
+                    }
                     </ul>
+                   <partial name="_LoginPartial" />
+
                 </div>
             </div>
         </nav>
