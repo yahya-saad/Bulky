@@ -17,7 +17,7 @@
             <div class="col-md-12">
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="row">
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                    <div class="form-floating mb-3 col-md-6">
+                    <div class="form-floating mb-3 col-md-12">
                         <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                         <label asp-for="Input.Email" class="ms-2 text-muted">Email</label>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -73,6 +73,14 @@
                             <option value="" disabled selected>------Select Role------</option>
                         </select>
                     </div>
+
+
+                    <div class="form-floating mb-3 col-md-6">
+                        <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select" style="display:none" >
+                            <option value="" disabled selected>------Select Company------</option>
+                        </select>
+                    </div>
+
                     <div class="col-12">
                         <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
                     </div>
@@ -117,4 +125,20 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            const $roleSelect = $('#Input_Role'); 
+            const $companyIdInput = $('#Input_CompanyId');
+
+            $roleSelect.change(function () {
+                const selectedRole = $roleSelect.find('option:selected').val();
+                if (selectedRole === "Company") {
+                   $companyIdInput.show();
+                } else {
+                   $companyIdInput.hide();
+                }
+            });
+        });
+    </script>
+
 }

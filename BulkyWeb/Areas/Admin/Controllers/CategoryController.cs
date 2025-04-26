@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-
-namespace BulkyBookWeb.Areas.Admin.Controllers;
+﻿namespace BulkyBookWeb.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = AppConstants.Roles.Role_Admin)]
+//[Authorize(Roles = AppConstants.Roles.Role_Admin)]
 public class CategoryController : Controller
 {
     private readonly IUnitOfWork uow;

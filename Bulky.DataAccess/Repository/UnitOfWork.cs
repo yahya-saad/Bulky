@@ -9,10 +9,13 @@ public class UnitOfWork : IUnitOfWork
 
     public IProductRepossitory Product { get; private set; }
 
+    public ICompanyRepository Company { get; private set; }
+
     public UnitOfWork(ApplicationDbContext dbContext)
     {
         this.Category = new CategoryRepository(dbContext);
         this.Product = new ProductRepository(dbContext);
+        this.Company = new CompanyRepository(dbContext);
         this.dbContext = dbContext;
     }
     public void Save()

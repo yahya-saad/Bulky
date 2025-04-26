@@ -9,6 +9,7 @@ public static class DataSeeder
     {
         SeedCategories(modelBuilder);
         SeedProducts(modelBuilder);
+        SeedCompanies(modelBuilder);
     }
 
     private static void SeedCategories(ModelBuilder modelBuilder)
@@ -172,5 +173,65 @@ public static class DataSeeder
 
         modelBuilder.Entity<Product>().HasData(products);
     }
+
+    private static void SeedCompanies(ModelBuilder modelBuilder)
+    {
+        var companies = new List<Company>()
+    {
+        new Company
+        {
+            Id = 1,
+            Name = "Tech Solutions",
+            StreetAddress = "123 Tech Street",
+            City = "San Francisco",
+            State = "CA",
+            PostalCode = "94105",
+            PhoneNumber = "415-123-4567"
+        },
+        new Company
+        {
+            Id = 2,
+            Name = "Health Plus",
+            StreetAddress = "456 Wellness Blvd",
+            City = "Austin",
+            State = "TX",
+            PostalCode = "73301",
+            PhoneNumber = "512-987-6543"
+        },
+        new Company
+        {
+            Id = 3,
+            Name = "Green Energy",
+            StreetAddress = "789 Solar Drive",
+            City = "Denver",
+            State = "CO",
+            PostalCode = "80014",
+            PhoneNumber = "303-456-7890"
+        },
+        new Company
+        {
+            Id = 4,
+            Name = "EduSmart",
+            StreetAddress = "321 Knowledge Ave",
+            City = "Boston",
+            State = "MA",
+            PostalCode = "02108",
+            PhoneNumber = "617-234-5678"
+        },
+        new Company
+        {
+            Id = 5,
+            Name = "FinCorp",
+            StreetAddress = "654 Finance Road",
+            City = "New York",
+            State = "NY",
+            PostalCode = "10001",
+            PhoneNumber = "212-345-6789"
+        }
+    };
+
+        modelBuilder.Entity<Company>().HasData(companies);
+    }
+
 }
 
