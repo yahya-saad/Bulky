@@ -4,5 +4,9 @@ public interface IUnitOfWork
     ICategoryRepository Category { get; }
     IProductRepossitory Product { get; }
     ICompanyRepository Company { get; }
+    IShoppingCartRepository ShoppingCart { get; }
+
+    IUserRepository User { get; }
+
     void Save();
 }

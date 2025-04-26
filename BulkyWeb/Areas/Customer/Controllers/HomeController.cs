@@ -1,4 +1,5 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BulkyBookWeb.Areas.Customer.Controllers;
 
@@ -21,8 +22,47 @@ public class HomeController : Controller
     public IActionResult Details(int productId)
     {
         var product = uow.Product.Get(p => p.Id == productId, includeProperties: "Category");
-        return View(product);
+        var cartObj = new ShoppingCart()
+        {
+            Product = product,
+            ProductId = productId,
+            Count = 1,
+        };
+        return View(cartObj);
     }
+
+    [HttpPost]
+    [Authorize]
+    public IActionResult Details(ShoppingCart shoppingCart)
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        shoppingCart.ApplicationUserId = userId;
+        shoppingCart.Product = null!; // Prevent EF from trying to insert the product again
+
+        var cartFromDb = uow.ShoppingCart.Get(
+            c => c.ApplicationUserId == userId && c.ProductId == shoppingCart.ProductId,
+            tracked: true
+        );
+
+        if (cartFromDb != null)
+        {
+            cartFromDb.Count += shoppingCart.Count;
+        }
+        else
+        {
+            uow.ShoppingCart.Add(shoppingCart);
+        }
+
+        uow.Save();
+        TempData["success"] = "Cart updated successfully";
+        return RedirectToAction(nameof(Index));
+    }
+
 
     public IActionResult Privacy()
     {

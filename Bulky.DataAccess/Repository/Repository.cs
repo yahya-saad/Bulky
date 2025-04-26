@@ -19,10 +19,14 @@ public class Repository<T> : IRepository<T> where T : class
         dbSet.Add(entity);
     }
 
-    public T? Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+    public T? Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
     {
         IQueryable<T> query = dbSet;
-        query = query.Where(filter);
+
+        if (!tracked)
+        {
+            query = query.AsNoTracking();
+        }
 
         if (includeProperties != null)
         {
@@ -32,14 +36,19 @@ public class Repository<T> : IRepository<T> where T : class
                 query = query.Include(includeProperty);
             }
         }
-        query = query.AsNoTracking();
+
+        query = query.Where(filter);
 
         return query.FirstOrDefault();
     }
 
-    public IEnumerable<T> GetAll(string? includeProperties = null)
+
+    public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
     {
-        IQueryable<T> query = dbSet;
+        IQueryable<T> query = dbSet.AsNoTracking();
+
+        if (filter != null)
+            query = query.Where(filter);
 
         if (includeProperties != null)
         {
@@ -50,10 +59,9 @@ public class Repository<T> : IRepository<T> where T : class
             }
         }
 
-        query = query.AsNoTracking();
-
         return query.ToList();
     }
+
 
     public void Remove(T entity)
     {

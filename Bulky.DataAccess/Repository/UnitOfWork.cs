@@ -10,12 +10,16 @@ public class UnitOfWork : IUnitOfWork
     public IProductRepossitory Product { get; private set; }
 
     public ICompanyRepository Company { get; private set; }
+    public IShoppingCartRepository ShoppingCart { get; private set; }
+    public IUserRepository User { get; private set; }
 
     public UnitOfWork(ApplicationDbContext dbContext)
     {
-        this.Category = new CategoryRepository(dbContext);
-        this.Product = new ProductRepository(dbContext);
-        this.Company = new CompanyRepository(dbContext);
+        Category = new CategoryRepository(dbContext);
+        Product = new ProductRepository(dbContext);
+        Company = new CompanyRepository(dbContext);
+        ShoppingCart = new ShoppingCartRepository(dbContext);
+        User = new UserRepository(dbContext);
         this.dbContext = dbContext;
     }
     public void Save()

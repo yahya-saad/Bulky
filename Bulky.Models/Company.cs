@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BulkyBook.Models;
+﻿namespace BulkyBook.Models;
 public class Company
 {
     public int Id { get; set; }

@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace BulkyBook.Models;
+﻿namespace BulkyBook.Models;
 public class Product
 {
     public int Id { get; set; }
