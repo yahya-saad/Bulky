@@ -1,6 +1,7 @@
 ﻿namespace BulkyBook.Models.ViewModels;
 public class ShoppingCartVM
 {
+    [ValidateNever]
     public IEnumerable<ShoppingCart> CartList { get; set; } = null!;
-    public double OrderTotal { get; set; }
+    public Order Order { get; set; }
 }
