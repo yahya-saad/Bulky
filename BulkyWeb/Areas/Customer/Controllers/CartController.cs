@@ -167,7 +167,7 @@ public class CartController : Controller
             var service = new SessionService();
             Session session = service.Create(options);
 
-            uow.Order.UpdateStripePaymentId(cartVM.Order.Id, session.Id, session.PaymentIntentId);
+            uow.Order.UpdateStripeSessionId(cartVM.Order.Id, session.Id);
             uow.Save();
 
             Response.Headers.Add("Location", session.Url);
@@ -184,7 +184,7 @@ public class CartController : Controller
         if (order == null)
             return NotFound();
 
-        if (!string.Equals(order.PaymentStatus, AppConstants.PaymentStatus.StatusDelayedPayment) && !string.IsNullOrEmpty(order.SessionId))
+        if (!string.Equals(order.PaymentStatus, AppConstants.PaymentStatus.StatusDelayedPayment))
         {
             var service = new SessionService();
             Session session = service.Get(order.SessionId);
@@ -192,15 +192,16 @@ public class CartController : Controller
             // Check if the session is paid
             if (session.PaymentStatus.ToLower() == "paid")
             {
+                uow.Order.UpdateStripePaymentIntentId(orderId, session.PaymentIntentId);
                 uow.Order.UpdateStatus(orderId, AppConstants.OrderStatus.StatusApproved, AppConstants.PaymentStatus.StatusApproved);
                 uow.Save();
             }
-
-            // Clear the shopping cart
-            var shoppingCartList = uow.ShoppingCart.GetAll(c => c.ApplicationUserId == order.ApplicationUserId);
-            uow.ShoppingCart.RemoveRange(shoppingCartList);
-            uow.Save();
         }
+
+        // Clear the shopping cart
+        var shoppingCartList = uow.ShoppingCart.GetAll(c => c.ApplicationUserId == order.ApplicationUserId);
+        uow.ShoppingCart.RemoveRange(shoppingCartList);
+        uow.Save();
 
         return View(orderId);
     }

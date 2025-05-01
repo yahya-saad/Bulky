@@ -5,5 +5,6 @@ public interface IOrderRepository : IRepository<Order>
 {
     void Update(Order order);
     void UpdateStatus(int id, string orderStatus, string? paymentStatus = null);
-    void UpdateStripePaymentId(int id, string sessionId, string paymentIntentId);
+    void UpdateStripePaymentIntentId(int id, string paymentIntentId);
+    void UpdateStripeSessionId(int id, string sessionId);
 }

@@ -27,18 +27,24 @@ public class OrderRepository : Repository<Order>, IOrderRepository
             order.PaymentStatus = paymentStatus;
     }
 
-    public void UpdateStripePaymentId(int id, string sessionId, string paymentIntentId)
+    public void UpdateStripePaymentIntentId(int id, string paymentIntentId)
     {
         var order = dbContext.Orders.FirstOrDefault(o => o.Id == id);
         if (order == null) return;
-
-        if (!string.IsNullOrEmpty(sessionId))
-            order.SessionId = sessionId;
 
         if (!string.IsNullOrEmpty(paymentIntentId))
         {
             order.PaymentIntentId = paymentIntentId;
             order.PaymentDate = DateTime.Now;
         }
+    }
+
+    public void UpdateStripeSessionId(int id, string sessionId)
+    {
+        var order = dbContext.Orders.FirstOrDefault(o => o.Id == id);
+        if (order == null) return;
+
+        if (!string.IsNullOrEmpty(sessionId))
+            order.SessionId = sessionId;
     }
 }
