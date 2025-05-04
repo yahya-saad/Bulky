@@ -8,7 +8,14 @@
     <div class="card-header bg-secondary bg-gradient ml-0 py-4">
         <div class="row">
             <div class="col-12">
-                <h2 class="text-center text-white py-2">Register</h2>
+                @if (User.IsInRole(AppConstants.Roles.Role_Admin))
+                {
+                    <h2 class="text-center text-white py-2">Register - ADMIN PORTAL</h2>
+                }
+                else
+                {
+                    <h2 class="text-center text-white py-2">Register</h2>
+                }
             </div>
         </div>
     </div>
@@ -68,12 +75,14 @@
                         <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                     </div>
 
-                    <div class="form-floating mb-3 col-md-6">
-                        <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
-                            <option value="" disabled selected>------Select Role------</option>
-                        </select>
-                    </div>
-
+                    @if (User.IsInRole(AppConstants.Roles.Role_Admin))
+                    {
+                        <div class="form-floating mb-3 col-md-6">
+                            <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
+                                <option value="" disabled selected>------Select Role------</option>
+                            </select>
+                        </div>
+                    }
 
                     <div class="form-floating mb-3 col-md-6">
                         <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select" style="display:none" >
@@ -86,7 +95,8 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-12">
+            @if(!User.IsInRole(AppConstants.Roles.Role_Admin)){
+            <div class="col-md-12 p-3 text-center">
                 <section>
                     <p class="divider-text d-flex pt-2">OR</p>
                     <h3>Use another service to register.</h3>
@@ -118,6 +128,7 @@
                     }
                 </section>
             </div>
+            }
         </div>
 
     </div>

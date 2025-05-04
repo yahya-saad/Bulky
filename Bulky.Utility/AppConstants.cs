@@ -33,4 +33,5 @@ public static class AppConstants
         public const string StatusCancelled = "Cancelled";
     }
 
+    public const string SessionCart = "SessionShoppingCart";
 }

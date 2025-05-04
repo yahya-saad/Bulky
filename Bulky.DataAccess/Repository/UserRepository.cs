@@ -10,4 +10,9 @@ public class UserRepository : Repository<ApplicationUser>, IUserRepository
     {
         this.dbContext = dbContext;
     }
+
+    public void Update(ApplicationUser user)
+    {
+        dbContext.ApplicationUsers.Update(user);
+    }
 }

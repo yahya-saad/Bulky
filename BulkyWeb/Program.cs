@@ -1,3 +1,5 @@
+using BulkyBook.DataAccess.DbInitializer;
+using BulkyBookWeb.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Stripe;
@@ -13,7 +15,7 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -31,6 +33,30 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthentication()
+   .AddFacebook(options =>
+   {
+       options.AppId = builder.Configuration["Facebook:AppId"];
+       options.AppSecret = builder.Configuration["Facebook:AppSecret"];
+   })
+
+   .AddMicrosoftAccount(options =>
+   {
+       options.ClientId = builder.Configuration["Microsoft:ClientId"];
+       options.ClientSecret = builder.Configuration["Microsoft:ClientSecret"];
+   });
+
+builder.Services.AddScoped<IDbinitializer, DbIntializer>();
+builder.Services.AddFluentEmailConfiguration(builder.Configuration);
 
 builder.Services.AddRazorPages();
 
@@ -56,7 +82,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
+SeedDatabase(app);
 app.MapRazorPages();
 
 app.MapControllerRoute(
@@ -64,3 +91,11 @@ app.MapControllerRoute(
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+void SeedDatabase(IApplicationBuilder app)
+{
+    using var scope = app.ApplicationServices.CreateScope();
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbinitializer>();
+    dbInitializer.Initialize().GetAwaiter().GetResult();
+}

@@ -201,6 +201,10 @@ public class CartController : Controller
         // Clear the shopping cart
         var shoppingCartList = uow.ShoppingCart.GetAll(c => c.ApplicationUserId == order.ApplicationUserId);
         uow.ShoppingCart.RemoveRange(shoppingCartList);
+
+        // Clear session cart count
+        HttpContext.Session.SetInt32(AppConstants.SessionCart, 0);
+
         uow.Save();
 
         return View(orderId);
@@ -231,7 +235,11 @@ public class CartController : Controller
                 cartFromDb.Count -= 1;
             }
             uow.Save();
+
+            var count = uow.ShoppingCart.GetAll(u => u.ApplicationUserId == cartFromDb.ApplicationUserId).Count();
+            HttpContext.Session.SetInt32(AppConstants.SessionCart, count);
         }
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -242,9 +250,14 @@ public class CartController : Controller
         {
             uow.ShoppingCart.Remove(cartFromDb);
             uow.Save();
+
+            var count = uow.ShoppingCart.GetAll(u => u.ApplicationUserId == cartFromDb.ApplicationUserId).Count();
+            HttpContext.Session.SetInt32(AppConstants.SessionCart, count);
         }
+
         return RedirectToAction(nameof(Index));
     }
+
 
 
     private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)

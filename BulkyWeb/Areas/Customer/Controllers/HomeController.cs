@@ -52,13 +52,18 @@ public class HomeController : Controller
         if (cartFromDb != null)
         {
             cartFromDb.Count += shoppingCart.Count;
+            uow.Save();
+
         }
         else
         {
             uow.ShoppingCart.Add(shoppingCart);
+            uow.Save();
+
+            HttpContext.Session.SetInt32(AppConstants.SessionCart,
+                uow.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Count());
         }
 
-        uow.Save();
         TempData["success"] = "Cart updated successfully";
         return RedirectToAction(nameof(Index));
     }

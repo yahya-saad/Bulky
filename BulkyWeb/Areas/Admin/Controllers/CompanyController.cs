@@ -1,7 +1,7 @@
 ﻿namespace BulkyBookWeb.Areas.Admin.Controllers;
 
 [Area("Admin")]
-//[Authorize(Roles = AppConstants.Roles.Role_Admin)]
+[Authorize(Roles = AppConstants.Roles.Role_Admin)]
 public class CompanyController(IUnitOfWork uow) : Controller
 {
     public IActionResult Index()
